@@ -5,33 +5,64 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+public class DetailActivity extends ActionBarActivity {
 
-public class MainActivity extends ActionBarActivity {
-
+    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Log.v(LOG_TAG, "onCreate");
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-//        //TODO emorand is this really necessary ?
-//        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
-
+        setContentView(R.layout.activity_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, new DetailActivityFragment())
                     .commit();
         }
     }
 
     @Override
+    protected void onDestroy() {
+        Log.v(LOG_TAG, "onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.v(LOG_TAG, "onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.v(LOG_TAG, "onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.v(LOG_TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.v(LOG_TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+
         return true;
     }
 
@@ -40,19 +71,18 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
+        // Launch the settings activity
         if (id == R.id.action_settings) {
-            // Start the setting activity
-            startActivity(new Intent(this,SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         } else if (id == R.id.action_viewonmap) {
+            //TODO emorand is there a way not to duplicate this from the main activity
             Intent i = new Intent(Intent.ACTION_VIEW);
             String preferredLocation = PreferenceManager.getDefaultSharedPreferences(this)
-                                            .getString(getString(R.string.pref_location_key),getString(R.string.pref_location_default));
+                    .getString(getString(R.string.pref_location_key),getString(R.string.pref_location_default));
             Uri builtUri = Uri.parse(GEO_BASE_URL).buildUpon()
                     .appendQueryParameter(GEO_PARAM, preferredLocation)
                     .build();
@@ -66,5 +96,4 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

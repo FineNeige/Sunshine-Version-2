@@ -1,5 +1,6 @@
 .gradle
 .DS_Store
+gradle.properties
 
 # built application files
 *.apk
